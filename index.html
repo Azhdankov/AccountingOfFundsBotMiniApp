@@ -26,13 +26,29 @@
         <canvas id="expensesChart"></canvas>
     </div>
     <script>
+	    
+	
+	
+	
 		document.addEventListener("DOMContentLoaded", () => {
+		
+		function generateColors(count) {
+    let colors = [];
+    for (let i = 0; i < count; i++) {
+        // Используем HSL для генерации менее насыщенных цветов
+        const hue = (i * 360 / count) % 360;
+        const saturation = 55; // Насыщенность 70%
+        const lightness = 55; // Светлость 70%
+        colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+    }
+    return colors;
+}
    
-        const params = new Proxy(new URLSearchParams(window.location.search), {
+		const params = new Proxy(new URLSearchParams(window.location.search), {
   get: (searchParams, prop) => searchParams.get(prop),
 });
-		console.log(params.categories);
-		console.log(params.amounts);
+		
+		let countOfCategories = params.categories.split(',').length - 1;
 
 		let categories = params.categories.split(',');
 		let expenses = params.amounts.split(',');
@@ -43,7 +59,10 @@
         };
 
         const ctx = document.getElementById('expensesChart').getContext('2d');
-        const totalExpenses = data.expenses.reduce((a, b) => a + b, 0);
+        let totalExpenses = data.expenses.reduce((accumulator, currentValue) =>{
+			return accumulator + parseInt(currentValue)
+		}, 0);
+		count
 
         const chart = new Chart(ctx, {
             type: 'doughnut',
@@ -52,14 +71,8 @@
                 datasets: [{
                     label: 'Траты',
                     data: data.expenses,
-                    /*backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)'
-                    ],*/
+                    backgroundColor: generateColors(11),
+					hoverBackgroundColor: generateColors(11),
                     borderWidth: 1
                 }]
             },
@@ -69,9 +82,6 @@
                     legend: {
                         position: 'top',
                     },
-			colors: {
-						forceOverride: true
-			},
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
@@ -87,6 +97,6 @@
         });
 });
 	
-	</script>
+		</script>
 </body>
 </html>
