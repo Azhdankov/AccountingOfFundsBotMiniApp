@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Траты за месяц</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        #chart-container {
+            width: 80%;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chart-container">
+        <canvas id="expensesChart"></canvas>
+    </div>
+    <script>
+		document.addEventListener("DOMContentLoaded", () => {
+    // Проверка наличия объекта Telegram WebApp
+    if (window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+
+        // Устанавливаем цвет темы, если необходимо
+        tg.MainButton.textColor = "#FFFFFF";
+        tg.MainButton.color = "#2cab37";
+
+        // Получаем данные из initData (в идеале, это JSON с категориями и суммами)
+        const initData = tg.initDataUnsafe;
+        
+        // Пример данных, которые могут быть переданы через initData
+        // Предположим, что данные передаются в виде JSON-строки
+        const data = initData ? JSON.parse(initData.query_id) : {
+            categories: ["Продукты", "Техника"],
+            expenses: [300, 500]
+        };
+
+        const ctx = document.getElementById('expensesChart').getContext('2d');
+        const totalExpenses = data.expenses.reduce((a, b) => a + b, 0);
+
+        const chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: data.categories,
+                datasets: [{
+                    label: 'Траты',
+                    data: data.expenses,
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                const category = data.categories[tooltipItem.dataIndex];
+                                const expense = data.expenses[tooltipItem.dataIndex];
+                                const percentage = ((expense / totalExpenses) * 100).toFixed(2);
+                                return `${category}: ${expense} руб. (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Можно добавить обработчик MainButton
+        tg.MainButton.setText("Обновить данные");
+        tg.MainButton.show();
+        tg.MainButton.onClick(() => {
+            // Действие при нажатии на кнопку
+            tg.sendData(JSON.stringify(data)); // Пример отправки данных обратно боту
+        });
+
+    } else {
+        console.error("Telegram WebApp API не инициализировано");
+    }
+});
+	</script>
+</body>
+</html>
