@@ -27,20 +27,8 @@
     </div>
     <script>
 		document.addEventListener("DOMContentLoaded", () => {
-    // Проверка наличия объекта Telegram WebApp
-    if (window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
-
-        // Устанавливаем цвет темы, если необходимо
-        tg.MainButton.textColor = "#FFFFFF";
-        tg.MainButton.color = "#2cab37";
-
-        // Получаем данные из initData (в идеале, это JSON с категориями и суммами)
-        const initData = tg.initDataUnsafe;
-        
-        // Пример данных, которые могут быть переданы через initData
-        // Предположим, что данные передаются в виде JSON-строки
-        const data = initData ? JSON.parse(initData.query_id) : {
+   
+        const data = {
             categories: ["Продукты", "Техника"],
             expenses: [300, 500]
         };
@@ -49,7 +37,7 @@
         const totalExpenses = data.expenses.reduce((a, b) => a + b, 0);
 
         const chart = new Chart(ctx, {
-            type: 'doughnut',
+            type: 'bar',
             data: {
                 labels: data.categories,
                 datasets: [{
@@ -85,19 +73,8 @@
                 }
             }
         });
-
-        // Можно добавить обработчик MainButton
-        tg.MainButton.setText("Обновить данные");
-        tg.MainButton.show();
-        tg.MainButton.onClick(() => {
-            // Действие при нажатии на кнопку
-            tg.sendData(JSON.stringify(data)); // Пример отправки данных обратно боту
-        });
-
-    } else {
-        console.error("Telegram WebApp API не инициализировано");
-    }
 });
+	
 	</script>
 </body>
 </html>
