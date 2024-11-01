@@ -52,14 +52,14 @@
                 datasets: [{
                     label: 'Траты',
                     data: data.expenses,
-                    backgroundColor: [
+                    /*backgroundColor: [
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(255, 99, 132, 0.2)'
                     ],
                     borderColor: [
                         'rgba(75, 192, 192, 1)',
                         'rgba(255, 99, 132, 1)'
-                    ],
+                    ],*/
                     borderWidth: 1
                 }]
             },
@@ -69,6 +69,9 @@
                     legend: {
                         position: 'top',
                     },
+			colors: {
+						forceOverride: true
+			},
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
