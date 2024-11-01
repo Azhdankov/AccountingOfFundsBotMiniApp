@@ -26,7 +26,7 @@
         <canvas id="expensesChart"></canvas>
     </div>
     <script>
-	    
+	
 	
 	
 	
@@ -49,6 +49,7 @@
 });
 		
 		let countOfCategories = params.categories.split(',').length - 1;
+		console.log(countOfCategories);
 
 		let categories = params.categories.split(',');
 		let expenses = params.amounts.split(',');
@@ -62,7 +63,6 @@
         let totalExpenses = data.expenses.reduce((accumulator, currentValue) =>{
 			return accumulator + parseInt(currentValue)
 		}, 0);
-		count
 
         const chart = new Chart(ctx, {
             type: 'doughnut',
@@ -97,6 +97,6 @@
         });
 });
 	
-		</script>
+	</script>
 </body>
 </html>
