@@ -28,16 +28,25 @@
     <script>
 		document.addEventListener("DOMContentLoaded", () => {
    
-        const data = {
-            categories: ["Продукты", "Техника"],
-            expenses: [300, 500]
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+  get: (searchParams, prop) => searchParams.get(prop),
+});
+		console.log(params.categories);
+		console.log(params.amounts);
+
+		let categories = params.categories.split(',');
+		let expenses = params.amounts.split(',');
+		
+		const data = {
+            categories: categories,
+            expenses: expenses
         };
 
         const ctx = document.getElementById('expensesChart').getContext('2d');
         const totalExpenses = data.expenses.reduce((a, b) => a + b, 0);
 
         const chart = new Chart(ctx, {
-            type: 'bar',
+            type: 'doughnut',
             data: {
                 labels: data.categories,
                 datasets: [{
