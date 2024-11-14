@@ -49,8 +49,8 @@
 });
 		
 		let countOfCategories = params.categories.split(',').length - 1;
-		console.log(countOfCategories);
 
+		params.categories = params.categories.replace("%20"," ");
 		let categories = params.categories.split(',');
 		let expenses = params.amounts.split(',');
 		
