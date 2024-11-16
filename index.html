@@ -24,10 +24,6 @@
 <body>
     <div id="chart-container">
         <canvas id="expensesChart"></canvas>
-		<p id="qparams"></p>
-		<p id="params1"></p>
-		<p id="params2"></p>
-		<p id="values"></p>
     </div>
     <script>
 	
@@ -51,19 +47,9 @@
 		const params = new Proxy(new URLSearchParams(window.location.search), {
   get: (searchParams, prop) => searchParams.get(prop),
 });
-		document.getElementById("qparams").textContent=decodeURIComponent(params.categories);
-		
 		let countOfCategories = params.categories.split(',').length - 1;
-		
-		document.getElementById("params1").textContent="params1: " + params.categories;
-		
-		params.categories = params.categories.replace("%20","");
-		
-		let categories = params.categories.split(',');
+		let categories = decodeURIComponent(params.categories).split(',');
 		let expenses = params.amounts.split(',');
-		
-		document.getElementById("params2").textContent="params2: " + categories;
-		document.getElementById("values").textContent="values: " + expenses;
 		
 		const data = {
             categories: categories,
