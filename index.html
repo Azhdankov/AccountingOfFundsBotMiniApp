@@ -24,11 +24,14 @@
 <body>
     <div id="chart-container">
         <canvas id="expensesChart"></canvas>
+		<p id="params1"></p>
+		<p id="params2"></p>
+		<p id="values"></p>
     </div>
     <script>
 	
 	
-	
+		
 	
 		document.addEventListener("DOMContentLoaded", () => {
 		
@@ -49,10 +52,16 @@
 });
 		
 		let countOfCategories = params.categories.split(',').length - 1;
-
+		
+		document.getElementById("params1").textContent="params1: " + params.categories;
+		
 		params.categories = params.categories.replace("%20"," ");
+		
 		let categories = params.categories.split(',');
 		let expenses = params.amounts.split(',');
+		
+		document.getElementById("params2").textContent="params2: " + categories;
+		document.getElementById("values").textContent="values: " + expenses;
 		
 		const data = {
             categories: categories,
