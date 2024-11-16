@@ -55,7 +55,7 @@
 		
 		document.getElementById("params1").textContent="params1: " + params.categories;
 		
-		params.categories = params.categories.replace("%20"," ");
+		params.categories = params.categories.replace("%20","");
 		
 		let categories = params.categories.split(',');
 		let expenses = params.amounts.split(',');
