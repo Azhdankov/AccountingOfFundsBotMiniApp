@@ -1,99 +1,119 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Траты за месяц</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
-            background-color: #f4f4f9;
+            padding: 0;
+            color: var(--tg-theme-text-color);
+            background: var(--tg-theme-bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
+        #header {
+            width: 100%;
+            color: var(--tg-theme-button-text-color);
+            text-align: center;
+            padding-bottom: 15px;
+            padding-top: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            background: var(--tg-theme-bg-color);
+        }
+
         #chart-container {
             width: 80%;
-            max-width: 600px;
+            margin-top: 15px;
         }
     </style>
 </head>
+
 <body>
+    <div id="header">
+        <h1>Отчет о тратах за месяц</h1>
+    </div>
     <div id="chart-container">
         <canvas id="expensesChart"></canvas>
     </div>
     <script>
-	
-	
-		
-	
-		document.addEventListener("DOMContentLoaded", () => {
-		
-		function generateColors(count) {
-    let colors = [];
-    for (let i = 0; i < count; i++) {
-        // Используем HSL для генерации менее насыщенных цветов
-        const hue = (i * 360 / count) % 360;
-        const saturation = 55; // Насыщенность 70%
-        const lightness = 55; // Светлость 70%
-        colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
-    }
-    return colors;
-}
-   
-		const params = new Proxy(new URLSearchParams(window.location.search), {
-  get: (searchParams, prop) => searchParams.get(prop),
-});
-		let countOfCategories = params.categories.split(',').length - 1;
-		let categories = decodeURIComponent(params.categories).split(',');
-		let expenses = params.amounts.split(',');
-		
-		const data = {
-            categories: categories,
-            expenses: expenses
-        };
 
-        const ctx = document.getElementById('expensesChart').getContext('2d');
-        let totalExpenses = data.expenses.reduce((accumulator, currentValue) =>{
-			return accumulator + parseInt(currentValue)
-		}, 0);
+        let tg = window.Telegram.WebApp;
+        tg.expand();
 
-        const chart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: data.categories,
-                datasets: [{
-                    label: 'Траты',
-                    data: data.expenses,
-                    backgroundColor: generateColors(11),
-					hoverBackgroundColor: generateColors(11),
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                const category = data.categories[tooltipItem.dataIndex];
-                                const expense = data.expenses[tooltipItem.dataIndex];
-                                const percentage = ((expense / totalExpenses) * 100).toFixed(2);
-                                return `${category}: ${expense} руб. (${percentage}%)`;
+        document.addEventListener("DOMContentLoaded", () => {
+
+            function generateColors(count) {
+                let colors = [];
+                for (let i = 0; i < count; i++) {
+                    const hue = (i * 360 / count) % 360;
+                    const saturation = 55;
+                    const lightness = 55;
+                    colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+                }
+                return colors;
+            }
+
+            const params = new Proxy(new URLSearchParams(window.location.search), {
+                get: (searchParams, prop) => searchParams.get(prop),
+            });
+            let countOfCategories = params.categories.split(',').length - 1;
+            let categories = decodeURIComponent(params.categories).split(',');
+            let expenses = params.amounts.split(',');
+
+            const data = {
+                categories: categories,
+                expenses: expenses
+            };
+
+            const ctx = document.getElementById('expensesChart').getContext('2d');
+            let totalExpenses = data.expenses.reduce((accumulator, currentValue) => {
+                return accumulator + parseInt(currentValue)
+            }, 0);
+
+            const chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.categories,
+                    datasets: [{
+                        label: 'Траты',
+                        data: data.expenses,
+                        backgroundColor: generateColors(11),
+                        hoverBackgroundColor: generateColors(11),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    const category = data.categories[tooltipItem.dataIndex];
+                                    const expense = data.expenses[tooltipItem.dataIndex];
+                                    const percentage = ((expense / totalExpenses) * 100).toFixed(2);
+                                    return `${category}: ${expense} руб. (${percentage}%)`;
+                                }
                             }
                         }
                     }
                 }
-            }
+            });
         });
-});
-	
-	</script>
+    </script>
 </body>
-</html>
