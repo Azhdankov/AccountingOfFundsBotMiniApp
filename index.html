@@ -15,14 +15,14 @@
             color: var(--tg-theme-text-color);
             background: var(--tg-theme-bg-color);
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             height: 100vh;
-            width: 90vh;
+            overflow: hidden;
         }
 
         #header {
-            width: 100%;
+            width: 90vw;
             color: var(--tg-theme-button-text-color);
             text-align: center;
             padding-bottom: 15px;
@@ -55,7 +55,8 @@
         tg.expand();
 
         document.addEventListener("DOMContentLoaded", () => {
-
+            
+            let legendTextColor = tg.themeParams?.text_color || '#000000';
             function generateColors(count) {
                 let colors = [];
                 for (let i = 0; i < count; i++) {
@@ -103,7 +104,8 @@
                             position: 'top',
                             labels: {
                                 usePointStyle: true,
-                                pointStyle: 'circle'
+                                pointStyle: 'circle',
+                                color: legendTextColor
                             }
                         },
                         tooltip: {
