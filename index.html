@@ -19,10 +19,11 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            flex-direction: column;
         }
 
         #header {
-            width: 90vw;
+            width: 100%;
             color: var(--tg-theme-button-text-color);
             text-align: center;
             padding-bottom: 15px;
@@ -33,11 +34,10 @@
         }
 
         #chart-container {
-            width: 90vw;
-            height: 90vh;
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%;
+            height: calc(100vh - 70px);
             box-sizing: border-box;
+            overflow: hidden;
         }
     </style>
 </head>
