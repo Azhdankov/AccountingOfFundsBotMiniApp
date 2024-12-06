@@ -73,6 +73,7 @@
             });
             let countOfCategories = params.categories.split(',').length - 1;
             let categories = decodeURIComponent(params.categories).split(',');
+            categories = categories.map(category => category.replace(/\/{3}/g, ','));
             let expenses = params.amounts.split(',');
 
             const data = {
