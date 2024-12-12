@@ -32,6 +32,13 @@
             padding-right: 10px;
             background: var(--tg-theme-bg-color);
         }
+		
+		#emptyInfo {
+            width: 100%;
+            color: var(--tg-theme-button-text-color);
+            text-align: center;
+            background: var(--tg-theme-bg-color);
+        }
 
         #chart-container {
             width: 100%;
@@ -45,6 +52,9 @@
 <body>
     <div id="header">
         <h1>Отчет о тратах за месяц</h1>
+    </div>
+    <div>
+        <h3 id="emptyInfo" style = "emptyInfo"></h3>
     </div>
     <div id="chart-container">
         <canvas id="expensesChart"></canvas>
@@ -71,10 +81,17 @@
             const params = new Proxy(new URLSearchParams(window.location.search), {
                 get: (searchParams, prop) => searchParams.get(prop),
             });
+			
+			if (params.categories === null) {
+                document.getElementById("emptyInfo").textContent="Необходимо открыть приложение через команду \"Вывести все категории на экран\" для отображения информации";
+            }
+			
             let countOfCategories = params.categories.split(',').length - 1;
             let categories = decodeURIComponent(params.categories).split(',');
             categories = categories.map(category => category.replace(/\/{3}/g, ','));
             let expenses = params.amounts.split(',');
+
+            
 
             const data = {
                 categories: categories,
